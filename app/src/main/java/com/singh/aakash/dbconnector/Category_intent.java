@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -26,9 +28,33 @@ public class Category_intent extends AppCompatActivity {
         categoryRecyclerViewHolder=new CategoryRecyclerViewHolder(categories,this);
 
         mRecyclerView.setAdapter(categoryRecyclerViewHolder);
+        mRecyclerView.addOnItemTouchListener(new CategoryRecyclerItemClickListener(this, mRecyclerView, new CategoryRecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //Log.v("Fuck", "fucked");
+                //Toast.makeText(MainActivity.this, "Zor se daba bhosadi k", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(getApplicationContext(), Products_List.class);
+//                intent.putExtra("category", categoryRecyclerViewHolder.getCategoryPosition(position));
+//                startActivity(intent);
+                //ConnectToDB connectToDB=new ConnectToDB(MainActivity.this);
+                //connectToDB.execute();
+                String cat=categoryRecyclerViewHolder.getCategoryPosition(position);
+                DBForProducts dbForProducts=new DBForProducts(Category_intent.this,cat);
+                dbForProducts.execute();
+            }
 
+            @Override
+            public void onItemLongClick(View view, int position) {
+                //Log.v("Fuck", "fuck");
+                Toast.makeText(Category_intent.this, "Fuck u", Toast.LENGTH_SHORT).show();
+
+            }
+        }));
 
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

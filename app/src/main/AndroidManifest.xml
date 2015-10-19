@@ -22,6 +22,10 @@
             android:name=".Category_intent"
             android:label="@string/title_activity_category_intent" >
         </activity>
+        <activity
+            android:name=".Products_List"
+            android:label="@string/title_activity_products__list" >
+        </activity>
     </application>
 
 </manifest>
