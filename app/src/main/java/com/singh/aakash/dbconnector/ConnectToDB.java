@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -20,14 +20,21 @@ public class ConnectToDB {
     //Product product;
     List<String> categories;
     Context context;
+    String placeId;
+    List<String> toBeSent;
 
     public void execute(){
         ConnectToServer connectToServer=new ConnectToServer();
         connectToServer.execute();
     }
-    public ConnectToDB(Context context) {
+    public ConnectToDB(Context context,String placeId) {
         categories=new ArrayList<>();
+        toBeSent=new ArrayList<>();
         this.context=context;
+        this.placeId=placeId;
+        toBeSent.add(placeId);
+        toBeSent.add("category");
+
         //this.product = product;
 //        String serverName = "localhost";
 //        int port = 3000;
@@ -63,6 +70,7 @@ public class ConnectToDB {
         @Override
         protected void onPostExecute(String s) {
             Intent intent=new Intent(context,Category_intent.class);
+            intent.putExtra("placeId",placeId);
             intent.putStringArrayListExtra("arrayOfCats", (ArrayList<String>) categories);
             context.startActivity(intent);
         }
@@ -81,9 +89,12 @@ public class ConnectToDB {
 //            System.out.println("Just connected to "
 //                    + client.getRemoteSocketAddress());
                 Log.v("fuck", "connected");
+//                OutputStream outToServer = client.getOutputStream();
+//                DataOutputStream out = new DataOutputStream(outToServer);
+//                out.writeUTF(toBeSent);
                 OutputStream outToServer = client.getOutputStream();
-                DataOutputStream out = new DataOutputStream(outToServer);
-                out.writeUTF("category");
+                ObjectOutputStream out = new ObjectOutputStream(outToServer);
+                out.writeObject(toBeSent);
                 out.flush();
                 //out.close();
 

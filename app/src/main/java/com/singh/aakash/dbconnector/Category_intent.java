@@ -16,6 +16,7 @@ public class Category_intent extends AppCompatActivity {
     List<String> categories;
     private RecyclerView mRecyclerView;
     private CategoryRecyclerViewHolder categoryRecyclerViewHolder;
+    String placeId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +24,7 @@ public class Category_intent extends AppCompatActivity {
 
         Intent intent=getIntent();
         categories=intent.getStringArrayListExtra("arrayOfCats");
+        placeId=intent.getExtras().getString("placeId");
         mRecyclerView=(RecyclerView)findViewById(R.id.recycler_view_cat);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         categoryRecyclerViewHolder=new CategoryRecyclerViewHolder(categories,this);
@@ -38,9 +40,13 @@ public class Category_intent extends AppCompatActivity {
 //                startActivity(intent);
                 //ConnectToDB connectToDB=new ConnectToDB(MainActivity.this);
                 //connectToDB.execute();
+//                String cat=categoryRecyclerViewHolder.getCategoryPosition(position);
+//                DBForProducts dbForProducts=new DBForProducts(Category_intent.this,cat);
+//                dbForProducts.execute();
                 String cat=categoryRecyclerViewHolder.getCategoryPosition(position);
-                DBForProducts dbForProducts=new DBForProducts(Category_intent.this,cat);
+                DBForProducts dbForProducts=new DBForProducts(Category_intent.this,cat,placeId);
                 dbForProducts.execute();
+
             }
 
             @Override

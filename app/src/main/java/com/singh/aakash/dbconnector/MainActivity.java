@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
+    String placeId="ChIJBbLl2j_BwjsRG5iLmvhVGi8";          //this you get after logging in
     Product product;
     GreetingClient greetingClient;
     @Override
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                product=new Product(cat.getText().toString(),prod.getText().toString(),desc.getText().toString(), pricee.getText().toString());
+                product=new Product(cat.getText().toString(),prod.getText().toString(),desc.getText().toString(), pricee.getText().toString(),placeId);
                 Toast toast=Toast.makeText(getApplicationContext(),product.toString(),Toast.LENGTH_LONG);
                 toast.show();
                 greetingClient=new GreetingClient(product);
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         getCategories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConnectToDB connectToDB=new ConnectToDB(MainActivity.this);
+                ConnectToDB connectToDB=new ConnectToDB(MainActivity.this,placeId);
                 connectToDB.execute();
             }
         });
