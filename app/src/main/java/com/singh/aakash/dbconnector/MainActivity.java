@@ -1,5 +1,6 @@
 package com.singh.aakash.dbconnector;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -28,27 +29,45 @@ public class MainActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                product=new Product(cat.getText().toString(),prod.getText().toString(),desc.getText().toString(), pricee.getText().toString(),placeId);
-                Toast toast=Toast.makeText(getApplicationContext(),product.toString(),Toast.LENGTH_LONG);
+                product = new Product(cat.getText().toString(), prod.getText().toString(), desc.getText().toString(), pricee.getText().toString(), placeId);
+                Toast toast = Toast.makeText(getApplicationContext(), product.toString(), Toast.LENGTH_LONG);
                 toast.show();
-                greetingClient=new GreetingClient(product);
+                greetingClient = new GreetingClient(product);
                 greetingClient.execute();
 
             }
         });
 
         Button getCategories=(Button)findViewById(R.id.getCategories);
-        getCategories.setText("What does this shop sell");
+        getCategories.setText("My Products List");
         getCategories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConnectToDB connectToDB=new ConnectToDB(MainActivity.this,placeId);
+                ConnectToDB connectToDB = new ConnectToDB(MainActivity.this, placeId);
                 connectToDB.execute();
             }
         });
 
+        Button submitAd=(Button)findViewById(R.id.submitAds);
+        submitAd.setText("Publish an Ad");
+        submitAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,Advertisements.class);
+                intent.putExtra("placeId",placeId);
+                startActivity(intent);
+            }
+        });
 
-
+        Button AdList=(Button)findViewById(R.id.AdList);
+        AdList.setText("My AdList");
+        AdList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBForAds dbForAds=new DBForAds(MainActivity.this,placeId);
+                dbForAds.execute();
+            }
+        });
     }
 
     @Override

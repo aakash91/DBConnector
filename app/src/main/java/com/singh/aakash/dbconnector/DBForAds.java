@@ -16,9 +16,9 @@ import java.util.List;
 
 //import static android.support.v4.app.ActivityCompat.startActivity;
 
-public class ConnectToDB {
+public class DBForAds {
     //Product product;
-    List<String> categories;
+    List<String> AdList;
     Context context;
     String placeId;
     List<String> toBeSent;
@@ -27,13 +27,13 @@ public class ConnectToDB {
         ConnectToServer connectToServer=new ConnectToServer();
         connectToServer.execute();
     }
-    public ConnectToDB(Context context,String placeId) {
-        categories=new ArrayList<>();
+    public DBForAds(Context context,String placeId) {
+        AdList=new ArrayList<>();
         toBeSent=new ArrayList<>();
         this.context=context;
         this.placeId=placeId;
         toBeSent.add(placeId);
-        toBeSent.add("category");
+        toBeSent.add("Ads");
 
         //this.product = product;
 //        String serverName = "localhost";
@@ -70,9 +70,9 @@ public class ConnectToDB {
 
         @Override
         protected void onPostExecute(String s) {
-            Intent intent=new Intent(context,Category_intent.class);
+            Intent intent=new Intent(context,AdsIntent.class);
             intent.putExtra("placeId",placeId);
-            intent.putStringArrayListExtra("arrayOfCats", (ArrayList<String>) categories);
+            intent.putStringArrayListExtra("arrayOfAds", (ArrayList<String>) AdList);
             context.startActivity(intent);
         }
 
@@ -107,7 +107,7 @@ public class ConnectToDB {
                 Log.v("fuck","i am here2");
                 ObjectInputStream in = new ObjectInputStream(inFromServer);
                 Log.v("fuck","i am here3");
-                categories=(ArrayList<String>) in.readObject();
+                AdList=(ArrayList<String>) in.readObject();
                 //product=(Product)in.readObject();
                 Log.v("fuck","i am here4");
                 //in.close();
@@ -118,7 +118,7 @@ public class ConnectToDB {
                 in.close();
                 out.close();
                 Log.v("fuck", "i am here6");
-                for(String s:categories){
+                for(String s:AdList){
                     Log.v("recieved",s);
                 }
 

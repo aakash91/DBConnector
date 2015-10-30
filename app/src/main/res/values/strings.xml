@@ -5,4 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_category_intent">Category_intent</string>
     <string name="title_activity_products__list">Products_List</string>
+    <string name="title_activity_advertisements">Advertisements</string>
+    <string name="title_activity_ads_intent">AdsIntent</string>
 </resources>

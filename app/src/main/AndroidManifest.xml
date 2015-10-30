@@ -26,6 +26,14 @@
             android:name=".Products_List"
             android:label="@string/title_activity_products__list" >
         </activity>
+        <activity
+            android:name=".Advertisements"
+            android:label="@string/title_activity_advertisements" >
+        </activity>
+        <activity
+            android:name=".AdsIntent"
+            android:label="@string/title_activity_ads_intent" >
+        </activity>
     </application>
 
 </manifest>
