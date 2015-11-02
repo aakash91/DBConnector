@@ -7,19 +7,18 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InsertAds {
+public class InsertCategory {
     List<String> toBesent;
 
     public void execute(){
         ConnectToServer connectToServer=new ConnectToServer();
         connectToServer.execute();
     }
-    public InsertAds(String placeId, String AdString,String shop) {
+    public InsertCategory(String placeId, String category) {
         toBesent=new ArrayList<>();
         toBesent.add(placeId);
-        toBesent.add(AdString);
-        toBesent.add(shop);
-        toBesent.add("ads");
+        toBesent.add(category);
+        toBesent.add("cat");
 //        String serverName = "localhost";
 //        int port = 3000;
 //        try {

@@ -7,36 +7,47 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    String placeId="ChIJBbLl2j_BwjsRG5iLmvhVGi8";          //this you get after logging in
+    //String placeId="ChIJBbLl2j_BwjsRG5iLmvhVGi8";          //this you get after logging in
+    //String placeId="ChIJowDzbsPDwjsRJyiD-7Q_0HY";
+    String placeId;
     Product product;
     GreetingClient greetingClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent=getIntent();
+        placeId=intent.getExtras().getString("placeId");
 
-        final EditText cat=(EditText) findViewById(R.id.category);
-        final EditText prod=(EditText) findViewById(R.id.product);
-        final EditText desc=(EditText)findViewById(R.id.description);
-        final EditText pricee=(EditText) findViewById(R.id.price);
 
-        Button submit=(Button)findViewById(R.id.submit);
-        submit.setText("Submit product");
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                product = new Product(cat.getText().toString(), prod.getText().toString(), desc.getText().toString(), pricee.getText().toString(), placeId);
-                Toast toast = Toast.makeText(getApplicationContext(), product.toString(), Toast.LENGTH_LONG);
-                toast.show();
-                greetingClient = new GreetingClient(product);
-                greetingClient.execute();
-
-            }
-        });
+        final TextView business_name=(TextView) findViewById(R.id.business_name);
+        business_name.setText(intent.getExtras().getString("username"));
+//        final EditText cat=(EditText) findViewById(R.id.category);
+//        final EditText prod=(EditText) findViewById(R.id.product);
+//        final EditText desc=(EditText)findViewById(R.id.description);
+//        final EditText pricee=(EditText) findViewById(R.id.price);
+//
+//        Button submit=(Button)findViewById(R.id.submit);
+//        submit.setText("Submit product");
+//        submit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                product = new Product(cat.getText().toString(), prod.getText().toString(), desc.getText().toString(), pricee.getText().toString(), placeId);
+//                Toast toast = Toast.makeText(getApplicationContext(), product.toString(), Toast.LENGTH_LONG);
+//                toast.show();
+//                greetingClient = new GreetingClient(product);
+//                greetingClient.execute();
+//                cat.setText("");
+//                prod.setText("");
+//                desc.setText("");
+//                pricee.setText("");
+//                cat.requestFocus();
+//
+//            }
+//        });
 
         Button getCategories=(Button)findViewById(R.id.getCategories);
         getCategories.setText("My Products List");
@@ -45,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ConnectToDB connectToDB = new ConnectToDB(MainActivity.this, placeId);
                 connectToDB.execute();
+
             }
         });
 
@@ -53,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         submitAd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,Advertisements.class);
-                intent.putExtra("placeId",placeId);
+                Intent intent = new Intent(MainActivity.this, Advertisements.class);
+                intent.putExtra("placeId", placeId);
                 startActivity(intent);
             }
         });
@@ -64,10 +76,37 @@ public class MainActivity extends AppCompatActivity {
         AdList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBForAds dbForAds=new DBForAds(MainActivity.this,placeId);
+                DBForAds dbForAds = new DBForAds(MainActivity.this, placeId);
                 dbForAds.execute();
             }
         });
+
+
+        Button AddCategory=(Button) findViewById(R.id.addCategory);
+        AddCategory.setText("Add a new Category");
+        AddCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,Category_Add.class);
+                intent.putExtra("placeId",placeId);
+                startActivity(intent);
+            }
+        });
+
+        Button AddProduct=(Button)findViewById(R.id.addProductToCategory);
+        AddProduct.setText("Add Product");
+        AddProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent=new Intent(MainActivity.this,Category_List.class);
+//                intent.putExtra("placeId", placeId);
+//                startActivity(intent);
+                ConnectForCat connectForCat=new ConnectForCat(MainActivity.this,placeId);
+                connectForCat.execute();
+            }
+        });
+
+
     }
 
     @Override

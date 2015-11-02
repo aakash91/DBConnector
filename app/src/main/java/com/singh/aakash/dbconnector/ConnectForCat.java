@@ -1,25 +1,40 @@
 package com.singh.aakash.dbconnector;
+
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.net.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InsertAds {
-    List<String> toBesent;
+//import static android.support.v4.app.ActivityCompat.startActivity;
+
+public class ConnectForCat {
+    //Product product;
+    List<String> categories;
+    Context context;
+    String placeId;
+    List<String> toBeSent;
 
     public void execute(){
         ConnectToServer connectToServer=new ConnectToServer();
         connectToServer.execute();
     }
-    public InsertAds(String placeId, String AdString,String shop) {
-        toBesent=new ArrayList<>();
-        toBesent.add(placeId);
-        toBesent.add(AdString);
-        toBesent.add(shop);
-        toBesent.add("ads");
+    public ConnectForCat(Context context,String placeId) {
+        categories=new ArrayList<>();
+        this.context=context;
+        this.placeId=placeId;
+        toBeSent=new ArrayList<>();
+        toBeSent.add(placeId);
+        toBeSent.add("category");
+        //this.product = product;
 //        String serverName = "localhost";
 //        int port = 3000;
 //        try {
@@ -51,13 +66,21 @@ public class InsertAds {
 
     public class ConnectToServer extends AsyncTask<String, Void, String> {
 
+        @Override
+        protected void onPostExecute(String s) {
+            Intent intent=new Intent(context,Category_List.class);
+            intent.putExtra("placeId",placeId);
+            intent.putStringArrayListExtra("arrayOfCats", (ArrayList<String>) categories);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
 
         @Override
         protected String doInBackground(String... params) {
-
+            //String ss=params[0];
             String serverName = "10.0.3.2";
             //String serverName = "191.168.1.12";
-            int port = 3001;
+            int port = 3002;
             try {
 //            System.out.println("Connecting to " + serverName +
 //                    " on port " + port);
@@ -68,10 +91,33 @@ public class InsertAds {
                 Log.v("fuck", "connected");
                 OutputStream outToServer = client.getOutputStream();
                 ObjectOutputStream out = new ObjectOutputStream(outToServer);
-                out.writeObject(toBesent);
+                out.writeObject(toBeSent);
                 out.flush();
+                //out.close();
+
+
+
                 Log.v("fuck", "i am here");
+
+                InputStream inFromServer = client.getInputStream();
+                Log.v("fuck","i am here2");
+                ObjectInputStream in = new ObjectInputStream(inFromServer);
+                Log.v("fuck","i am here3");
+                categories=(ArrayList<String>) in.readObject();
+                //product=(Product)in.readObject();
+                Log.v("fuck","i am here4");
+                //in.close();
+                Log.v("fuck", "i am here5");
+
+
                 client.close();
+                in.close();
+                out.close();
+                Log.v("fuck", "i am here6");
+                for(String s:categories){
+                    Log.v("recieved",s);
+                }
+
                 //        + client.getLocalSocketAddress());
                 //out.writeUTF("what's up");
                 //InputStream inFromServer = client.getInputStream();
@@ -84,7 +130,10 @@ public class InsertAds {
                 //client.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
+
             return "success";
         }
     }

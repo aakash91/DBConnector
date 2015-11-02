@@ -17,7 +17,7 @@ public class Product implements Serializable{
         this.name = name;
         this.description = description;
         this.price = price;
-        this.placeId=placeId;
+       this.placeId=placeId;
     }
 
     public String getPlaceId() {
