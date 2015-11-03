@@ -1,7 +1,9 @@
 package com.singh.aakash.dbconnector;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,12 +17,29 @@ public class MainActivity extends AppCompatActivity {
     String placeId;
     Product product;
     GreetingClient greetingClient;
+
+    //public static final String PREFS_NAME = "MyPrefsFile";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent=getIntent();
         placeId=intent.getExtras().getString("placeId");
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        //SharedPreferences.Editor editor = settings.edit();
+        sharedPref.edit().putBoolean("hasLoggedIn", true).commit();
+        sharedPref.edit().putString("username", intent.getExtras().getString("username")).commit();
+        sharedPref.edit().putString("pwd", intent.getExtras().getString("pwd")).commit();
+
+
+//Set "hasLoggedIn" to true
+        //editor.putBoolean("hasLoggedIn", true);
+
+// Commit the edits!
+        ///editor.commit();
 
 
         final TextView business_name=(TextView) findViewById(R.id.business_name);

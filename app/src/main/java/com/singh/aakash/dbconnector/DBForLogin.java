@@ -1,5 +1,6 @@
 package com.singh.aakash.dbconnector;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -21,15 +22,23 @@ public class DBForLogin {
     //Product product;
     List<String> recieved;
     Context context;
+    int loggedin;
+    public List<String> getRecieved() {
+        return recieved;
+    }
 
     List<String> toBeSent;
+
+    public int getLoggedin() {
+        return loggedin;
+    }
 
     public void execute(){
         ConnectToServer connectToServer=new ConnectToServer();
         connectToServer.execute();
     }
     public DBForLogin(Context context,String username,String pwd) {
-
+        loggedin=0;
         recieved=new ArrayList<>();
         toBeSent=new ArrayList<>();
         this.context=context;
@@ -74,12 +83,15 @@ public class DBForLogin {
         @Override
         protected void onPostExecute(String s) {
             Intent intent=new Intent(context,MainActivity.class);
-            if(recieved.size()==2) {
+            if(recieved.size()==3) {
                 intent.putExtra("placeId", recieved.get(1));
                 intent.putExtra("username", recieved.get(0));
+                intent.putExtra("pwd", recieved.get(2));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 //intent.putStringArrayListExtra("arrayOfCats", (ArrayList<String>) categories);
                 context.startActivity(intent);
+                loggedin=1;
+                ((Activity)context).finish();
             }
             else {
                 Toast.makeText(context,"invalid credentials",Toast.LENGTH_LONG).show();
